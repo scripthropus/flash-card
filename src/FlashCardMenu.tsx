@@ -8,11 +8,11 @@ import ListItemButton from "@mui/material/ListItemButton";
 import ListItemText from "@mui/material/ListItemText";
 import { useState } from "react";
 
-interface FlashCardMenueProps {
+interface FlashCardMenuProps {
 	onNavigate: (screenName: string) => void;
 }
 
-export const FlashCardMenue = ({ onNavigate }: FlashCardMenueProps) => {
+export const FlashCardMenu = ({ onNavigate }: FlashCardMenuProps) => {
 	const [open, setOpen] = useState(false);
 
 	const toggleDrawer = (newOpen: boolean) => () => {
@@ -27,7 +27,7 @@ export const FlashCardMenue = ({ onNavigate }: FlashCardMenueProps) => {
 	const DrawerList = (
 		<Box sx={{ width: 250 }} role="presentation">
 			<List>
-				{["home", "add flash card"].map((text) => (
+				{["home", "add flash card", "flash card"].map((text) => (
 					<ListItem key={text} disablePadding>
 						<ListItemButton onClick={() => handleListItemClick(text)}>
 							<ListItemText
