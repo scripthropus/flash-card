@@ -30,9 +30,7 @@ export const FlashCardMenu = ({ onNavigate }: FlashCardMenuProps) => {
 				{["home", "add flash card", "flash card"].map((text) => (
 					<ListItem key={text} disablePadding>
 						<ListItemButton onClick={() => handleListItemClick(text)}>
-							<ListItemText
-								primary={text.charAt(0).toUpperCase() + text.slice(1)}
-							/>
+							<ListItemText primary={text} />
 						</ListItemButton>
 					</ListItem>
 				))}
@@ -42,9 +40,7 @@ export const FlashCardMenu = ({ onNavigate }: FlashCardMenuProps) => {
 				{["login", "sign up"].map((text) => (
 					<ListItem key={text} disablePadding>
 						<ListItemButton onClick={() => handleListItemClick(text)}>
-							<ListItemText
-								primary={text.charAt(0).toUpperCase() + text.slice(1)}
-							/>
+							<ListItemText primary={text} />
 						</ListItemButton>
 					</ListItem>
 				))}

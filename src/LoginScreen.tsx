@@ -1,4 +1,4 @@
-import { TextField, Typography } from "@mui/material";
+import { Stack, TextField, Typography } from "@mui/material";
 import { useState } from "react";
 import { z } from "zod";
 
@@ -28,7 +28,7 @@ export const LoginScreen = () => {
 		}
 	};
 	return (
-		<>
+		<Stack direction="column" spacing={{ xs: 1, sm: 2 }}>
 			<Typography variant="h5">Login Screen</Typography>
 			<TextField
 				label="メールアドレス"
@@ -36,6 +36,7 @@ export const LoginScreen = () => {
 				value={email}
 				onChange={handleEmailChange}
 				error={isEmailError}
+				sx={{ width: "100%", maxWidth: 400 }}
 			/>
 
 			<TextField
@@ -44,7 +45,8 @@ export const LoginScreen = () => {
 				type="password"
 				value={password}
 				onChange={(e) => setPassword(e.target.value)}
+				sx={{ width: "100%", maxWidth: 400 }}
 			/>
-		</>
+		</Stack>
 	);
 };

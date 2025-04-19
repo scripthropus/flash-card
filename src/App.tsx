@@ -9,7 +9,7 @@ import { SignUpScreen } from "./SignUpScreen";
 
 const testData = {
 	question: "question",
-	anser: "ANS",
+	answer: "ANS",
 	incorrectAns: ["a", "b", "c"],
 };
 
@@ -28,7 +28,7 @@ function App() {
 				return (
 					<FlashCard
 						question={testData.question}
-						anser={testData.anser}
+						answer={testData.answer}
 						incorrectAns={testData.incorrectAns}
 					/>
 				);

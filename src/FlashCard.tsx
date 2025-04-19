@@ -1,8 +1,8 @@
-import { Button, Typography } from "@mui/material";
+import { Button, Stack, Typography } from "@mui/material";
 
 interface FlashCardProps {
 	question: string;
-	anser: string;
+	answer: string;
 	incorrectAns: string[];
 }
 
@@ -17,18 +17,22 @@ const shuffleArray = <T,>(array: T[]): T[] => {
 
 export const FlashCard = ({
 	question,
-	anser,
+	answer,
 	incorrectAns,
 }: FlashCardProps) => {
 	const shuffled = shuffleArray(incorrectAns);
 	const rand = Math.floor(Math.random() * 4);
-	const choices = shuffled.toSpliced(rand, 0, anser);
+	const choices = shuffled.toSpliced(rand, 0, answer);
 	return (
 		<>
 			<Typography variant="h5">{question}</Typography>
-			{choices.map((val) => (
-				<Button key={val}>{val}</Button>
-			))}
+			<Stack direction="column" spacing={{ sm: 2 }}>
+				{choices.map((val) => (
+					<Button key={val} sx={{ width: "100%", maxWidth: 400 }}>
+						{val}
+					</Button>
+				))}
+			</Stack>
 		</>
 	);
 };
