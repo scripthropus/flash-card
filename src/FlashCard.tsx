@@ -1,4 +1,4 @@
-import { Typography } from "@mui/material";
+import { Button, Typography } from "@mui/material";
 
 interface FlashCardProps {
 	question: string;
@@ -27,7 +27,7 @@ export const FlashCard = ({
 		<>
 			<Typography variant="h5">{question}</Typography>
 			{choices.map((val) => (
-				<Typography>{val}</Typography>
+				<Button key={val}>{val}</Button>
 			))}
 		</>
 	);

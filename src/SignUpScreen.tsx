@@ -1,10 +1,34 @@
 import { Stack, TextField, Typography } from "@mui/material";
 import { useState } from "react";
+import { z } from "zod";
+
+const emailSchema = z.string().email();
 
 export const SignUpScreen = () => {
 	const [email, setEmail] = useState("");
+	const [isEmailError, setIsEmailError] = useState(false);
 	const [userName, setUserName] = useState("");
 	const [password, setPassword] = useState("");
+
+	const handleEmailChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+		const newValue = e.target.value;
+		setEmail(newValue);
+
+		// 入力値が空の場合はエラーにしない
+		if (newValue === "") {
+			setIsEmailError(false);
+			return;
+		}
+
+		const result = emailSchema.safeParse(newValue);
+
+		if (result.success) {
+			setIsEmailError(false);
+		} else {
+			setIsEmailError(true);
+		}
+	};
+
 	return (
 		<>
 			<Stack direction="column" spacing={{ xs: 1, sm: 2 }}>
@@ -21,7 +45,8 @@ export const SignUpScreen = () => {
 						label="メールアドレス"
 						variant="outlined"
 						value={email}
-						onChange={(e) => setEmail(e.target.value)}
+						onChange={handleEmailChange}
+						error={isEmailError}
 					/>
 					<TextField
 						label="パスワード"
