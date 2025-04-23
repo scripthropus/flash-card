@@ -1,6 +1,8 @@
-import { Stack, TextField, Typography } from "@mui/material";
+import { Button, Stack, TextField, Typography } from "@mui/material";
+import { createUserWithEmailAndPassword, getAuth } from "firebase/auth";
 import { useState } from "react";
 import { z } from "zod";
+import { app } from "./firebase.ts";
 
 const emailSchema = z.string().email();
 
@@ -26,6 +28,27 @@ export const SignUpScreen = () => {
 			setIsEmailError(false);
 		} else {
 			setIsEmailError(true);
+		}
+	};
+
+	const handleSubmit = () => {
+		if (!setIsEmailError) {
+			const auth = getAuth(app);
+
+			createUserWithEmailAndPassword(auth, email, password)
+				.then((userCredential) => {
+					// Signed up
+					const user = userCredential.user;
+					alert(`追加されました ${user} さん`);
+					// ...
+				})
+				.catch((error) => {
+					const errorCode = error.code;
+					const errorMessage = error.message;
+					alert("追加に失敗しました");
+					console.log(`${errorCode} : ${errorMessage}`);
+					// ..
+				});
 		}
 	};
 
@@ -56,6 +79,7 @@ export const SignUpScreen = () => {
 						onChange={(e) => setPassword(e.target.value)}
 					/>
 				</Stack>
+				<Button onClick={handleSubmit}>送信</Button>
 			</Stack>
 		</>
 	);

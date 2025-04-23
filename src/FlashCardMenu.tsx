@@ -50,7 +50,7 @@ export const FlashCardMenu = ({ onNavigate }: FlashCardMenuProps) => {
 
 	return (
 		<div>
-			<Button onClick={toggleDrawer(true)}>Open drawer</Button>
+			<Button onClick={toggleDrawer(true)}>メニュー</Button>
 			<Drawer open={open} onClose={toggleDrawer(false)}>
 				{DrawerList}
 			</Drawer>

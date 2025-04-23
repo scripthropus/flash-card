@@ -11,6 +11,8 @@ node_modules
 dist
 dist-ssr
 *.local
+public/
+.env
 
 # Editor directories and files
 .vscode/*
@@ -22,3 +24,11 @@ dist-ssr
 *.njsproj
 *.sln
 *.sw?
+
+# firebase
+.firebase
+.firebaserc
+apphosting.yaml
+firebase.json
+firestore.indexes.json
+firestore.rules
