@@ -15,7 +15,7 @@ const shuffleArray = <T,>(array: T[]): T[] => {
 	return shuffled;
 };
 
-export const FlashCard = ({
+export const FlashCardQuiz = ({
 	question,
 	answer,
 	incorrectAns,

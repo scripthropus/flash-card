@@ -1,8 +1,8 @@
 import Box from "@mui/material/Box";
 import { useState } from "react";
 import { AddFlashCardScreen } from "./AddFlashCardScreen";
-import { FlashCard } from "./FlashCard";
 import { FlashCardMenu } from "./FlashCardMenu";
+import { FlashCardQuiz } from "./FlashCardQuiz";
 import { HomeScreen } from "./HomeScreen";
 import { LoginScreen } from "./LoginScreen";
 import { SignUpScreen } from "./SignUpScreen";
@@ -26,7 +26,7 @@ function App() {
 				return <AddFlashCardScreen />;
 			case "flash card":
 				return (
-					<FlashCard
+					<FlashCardQuiz
 						question={testData.question}
 						answer={testData.answer}
 						incorrectAns={testData.incorrectAns}

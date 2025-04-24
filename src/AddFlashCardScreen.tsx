@@ -1,7 +1,8 @@
-import { Box, Stack, TextField, Typography } from "@mui/material";
+import { Box, Button, Stack, TextField, Typography } from "@mui/material";
 import { useState } from "react";
 
 export const AddFlashCardScreen = () => {
+	const [deckName, setDeckName] = useState("");
 	const [question, setQuestion] = useState("");
 	const [answer, setAnswer] = useState("");
 	const [incorrectAnswers, setIncorrectAnswers] = useState(["", "", ""]);
@@ -12,6 +13,14 @@ export const AddFlashCardScreen = () => {
 		setIncorrectAnswers(newIncorrectAnswers);
 	};
 
+	const handleAddFlashCard = () => {
+		if (deckName && question && answer && incorrectAnswers.every(Boolean)) {
+			console.log("追加");
+		} else {
+			alert("すべての項目を入力してください");
+		}
+	};
+
 	return (
 		<Box sx={{ p: 3 }}>
 			<Typography variant="h5" gutterBottom>
@@ -20,11 +29,16 @@ export const AddFlashCardScreen = () => {
 			<Stack direction="row" spacing={4}>
 				<Stack direction="column" spacing={2}>
 					<TextField
+						label="追加するデッキ名"
+						variant="outlined"
+						onChange={(e) => setDeckName(e.target.value)}
+					/>
+					<TextField
 						label="カードの内容"
 						variant="outlined"
 						value={question}
 						onChange={(e) => setQuestion(e.target.value)}
-						fullWidth // 横幅いっぱいに広げる
+						fullWidth
 					/>
 					<TextField
 						label="カードの答え"
@@ -57,6 +71,7 @@ export const AddFlashCardScreen = () => {
 						fullWidth
 					/>
 				</Stack>
+				<Button onClick={handleAddFlashCard}>追加</Button>
 			</Stack>
 		</Box>
 	);
