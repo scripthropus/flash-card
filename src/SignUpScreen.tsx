@@ -1,8 +1,10 @@
 import { Button, Stack, TextField, Typography } from "@mui/material";
 import { createUserWithEmailAndPassword, getAuth } from "firebase/auth";
-import { useState } from "react";
+import { useState, useContext } from "react";
 import { z } from "zod";
 import { app } from "./firebase.ts";
+import { testStateContext } from "./App.tsx";
+import { UserState } from "./Auth.ts";
 
 const emailSchema = z.string().email();
 
@@ -11,6 +13,10 @@ export const SignUpScreen = () => {
 	const [isEmailError, setIsEmailError] = useState(false);
 	const [userName, setUserName] = useState("");
 	const [password, setPassword] = useState("");
+
+	//test
+	const testUser =useContext(testStateContext) 
+	console.log(testUser);
 
 	const handleEmailChange = (e: React.ChangeEvent<HTMLInputElement>) => {
 		const newValue = e.target.value;
@@ -32,6 +38,15 @@ export const SignUpScreen = () => {
 	};
 
 	const handleSubmit = () => {
+		//test
+		const changed: UserState = {
+			isLoggedIn: true,
+			userName: "changed",
+			userID: "changed",
+			email: "changed"
+		}
+		testUser[1](changed);
+		console.log(testUser);
 		if (!setIsEmailError) {
 			const auth = getAuth(app);
 
