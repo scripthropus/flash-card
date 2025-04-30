@@ -18,6 +18,14 @@ export const userInfoContext = createContext<UserInfoContextType>({
 	setUserInfo: () => {},
 });
 
+export const SCREEN = {
+	HOME: "home",
+	LOGIN: "login",
+	SIGN_UP: "signUp",
+	ADD_FLASH_CARD: "addFlashCard",
+	FLASH_CARD: "flashCard",
+} as const;
+
 const testData = {
 	question: "question",
 	answer: "ANS",
@@ -34,9 +42,9 @@ function App() {
 
 	const renderScreen = () => {
 		switch (currentScreen) {
-			case "add flash card":
+			case SCREEN.ADD_FLASH_CARD:
 				return <AddFlashCardScreen />;
-			case "flash card":
+			case SCREEN.FLASH_CARD:
 				return (
 					<FlashCardQuiz
 						question={testData.question}
@@ -44,11 +52,16 @@ function App() {
 						incorrectAns={testData.incorrectAns}
 					/>
 				);
-			case "login":
+			case SCREEN.LOGIN:
 				return <LoginScreen />;
-			case "sign up":
-				return <SignUpScreen />;
-			case "home":
+			case SCREEN.SIGN_UP:
+				return (
+					<SignUpScreen
+						screenName={SCREEN.HOME}
+						onAuthSuccess={handleScreenChange}
+					/>
+				);
+			case SCREEN.HOME:
 				return <HomeScreen />;
 			default:
 				return <HomeScreen />;

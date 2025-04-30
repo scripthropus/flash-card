@@ -7,6 +7,7 @@ import ListItem from "@mui/material/ListItem";
 import ListItemButton from "@mui/material/ListItemButton";
 import ListItemText from "@mui/material/ListItemText";
 import { useState } from "react";
+import { SCREEN } from "./App";
 
 interface FlashCardMenuProps {
 	onNavigate: (screenName: string) => void;
@@ -27,7 +28,7 @@ export const FlashCardMenu = ({ onNavigate }: FlashCardMenuProps) => {
 	const DrawerList = (
 		<Box sx={{ width: 250 }} role="presentation">
 			<List>
-				{["home", "add flash card", "flash card"].map((text) => (
+				{[SCREEN.HOME, SCREEN.ADD_FLASH_CARD, SCREEN.FLASH_CARD].map((text) => (
 					<ListItem key={text} disablePadding>
 						<ListItemButton onClick={() => handleListItemClick(text)}>
 							<ListItemText primary={text} />
@@ -37,7 +38,7 @@ export const FlashCardMenu = ({ onNavigate }: FlashCardMenuProps) => {
 			</List>
 			<Divider />
 			<List>
-				{["login", "sign up"].map((text) => (
+				{[SCREEN.LOGIN, SCREEN.SIGN_UP].map((text) => (
 					<ListItem key={text} disablePadding>
 						<ListItemButton onClick={() => handleListItemClick(text)}>
 							<ListItemText primary={text} />

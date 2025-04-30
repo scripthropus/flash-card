@@ -8,14 +8,21 @@ import type { UserInfo } from "./userInfo.ts";
 
 const emailSchema = z.string().email();
 
-export const SignUpScreen = () => {
+interface SignUpScreenProps {
+	screenName: string;
+	onAuthSuccess: (s: string) => void;
+}
+
+export const SignUpScreen = ({
+	screenName,
+	onAuthSuccess,
+}: SignUpScreenProps) => {
 	const [email, setEmail] = useState("");
 	const [isEmailError, setIsEmailError] = useState(false);
 	const [userName, setUserName] = useState("");
 	const [password, setPassword] = useState("");
 
-	//test
-	const testUser = useContext(userInfoContext);
+	const userInfo = useContext(userInfoContext);
 
 	const handleEmailChange = (e: React.ChangeEvent<HTMLInputElement>) => {
 		const newValue = e.target.value;
@@ -37,32 +44,31 @@ export const SignUpScreen = () => {
 	};
 
 	const handleSubmit = () => {
-		const changed: UserInfo = {
-			isLoggedIn: true,
-			userName: "changed",
-			userID: "changed",
-			email: "changed",
-		};
-		const result = emailSchema.safeParse(email);
-		if (result.success) {
+		const emailParse = emailSchema.safeParse(email);
+		if (emailParse.success) {
 			const auth = getAuth(app);
-
-			testUser.setUserInfo(changed);
-			console.log(testUser.userInfo);
 
 			createUserWithEmailAndPassword(auth, email, password)
 				.then((userCredential) => {
-					// Signed up
 					const user = userCredential.user;
+					console.log(userCredential);
+
+					const info: UserInfo = {
+						isLoggedIn: true,
+						userName: userName,
+						userID: userCredential.user.uid,
+						email: email,
+					};
+
+					userInfo.setUserInfo(info);
 					alert(`追加されました ${user} さん`);
-					// ...
+					onAuthSuccess(screenName);
 				})
 				.catch((error) => {
 					const errorCode = error.code;
 					const errorMessage = error.message;
 					alert("追加に失敗しました");
 					console.log(`${errorCode} : ${errorMessage}`);
-					// ..
 				});
 		}
 	};
