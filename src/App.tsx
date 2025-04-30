@@ -1,17 +1,22 @@
 import Box from "@mui/material/Box";
-import { useState, createContext } from "react";
+import { createContext, useState } from "react";
 import { AddFlashCardScreen } from "./AddFlashCardScreen";
 import { FlashCardMenu } from "./FlashCardMenu";
 import { FlashCardQuiz } from "./FlashCardQuiz";
 import { HomeScreen } from "./HomeScreen";
 import { LoginScreen } from "./LoginScreen";
 import { SignUpScreen } from "./SignUpScreen";
-import { UserState, guest } from "./Auth";
+import { type UserInfo, guest } from "./userInfo";
 
-export const testStateContext = createContext<[UserState, React.Dispatch<React.SetStateAction<UserState>>]>([
-    guest, // UserState の初期値
-    () => {} // 更新関数の初期値（空の関数）
-]);
+interface UserInfoContextType {
+	userInfo: UserInfo;
+	setUserInfo: React.Dispatch<React.SetStateAction<UserInfo>>;
+}
+
+export const userInfoContext = createContext<UserInfoContextType>({
+	userInfo: guest,
+	setUserInfo: () => {},
+});
 
 const testData = {
 	question: "question",
@@ -21,7 +26,7 @@ const testData = {
 
 function App() {
 	const [currentScreen, setCurrentScreen] = useState<string>("home");
-	const [test, setTest] = useState(guest);
+	const [userInfo, setUserInfo] = useState(guest);
 
 	const handleScreenChange = (screenName: string) => {
 		setCurrentScreen(screenName);
@@ -51,14 +56,14 @@ function App() {
 	};
 
 	return (
-		<testStateContext.Provider value={[test, setTest]}>
-		<Box sx={{ display: "flex" }}>
-			<FlashCardMenu onNavigate={handleScreenChange} />
-			<Box component="main" sx={{ flexGrow: 1, p: 3, mt: 8 }}>
-				{renderScreen()}
+		<userInfoContext.Provider value={{ userInfo, setUserInfo }}>
+			<Box sx={{ display: "flex" }}>
+				<FlashCardMenu onNavigate={handleScreenChange} />
+				<Box component="main" sx={{ flexGrow: 1, p: 3, mt: 8 }}>
+					{renderScreen()}
+				</Box>
 			</Box>
-		</Box>
-		</testStateContext.Provider>
+		</userInfoContext.Provider>
 	);
 }
 
