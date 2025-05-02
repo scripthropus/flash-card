@@ -51,7 +51,6 @@ export const SignUpScreen = ({
 			createUserWithEmailAndPassword(auth, email, password)
 				.then((userCredential) => {
 					const user = userCredential.user;
-					console.log(userCredential);
 
 					const info: UserInfo = {
 						isLoggedIn: true,

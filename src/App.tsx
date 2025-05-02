@@ -53,7 +53,12 @@ function App() {
 					/>
 				);
 			case SCREEN.LOGIN:
-				return <LoginScreen />;
+				return (
+					<LoginScreen
+						screenName={SCREEN.HOME}
+						onLoginSuccess={handleScreenChange}
+					/>
+				);
 			case SCREEN.SIGN_UP:
 				return (
 					<SignUpScreen

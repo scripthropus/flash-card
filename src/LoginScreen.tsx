@@ -1,13 +1,27 @@
-import { Stack, TextField, Typography } from "@mui/material";
-import { useState } from "react";
+import { Button, Stack, TextField, Typography } from "@mui/material";
+import { getAuth, signInWithEmailAndPassword } from "firebase/auth";
+import { useContext, useState } from "react";
 import { z } from "zod";
+import { userInfoContext } from "./App";
+import { app } from "./firebase";
+import type { UserInfo } from "./userInfo.ts";
 
 const emailSchema = z.string().email();
 
-export const LoginScreen = () => {
+interface LoginScreenProps {
+	screenName: string;
+	onLoginSuccess: (s: string) => void;
+}
+
+export const LoginScreen = ({
+	screenName,
+	onLoginSuccess,
+}: LoginScreenProps) => {
 	const [email, setEmail] = useState("");
 	const [password, setPassword] = useState("");
 	const [isEmailError, setIsEmailError] = useState(false);
+
+	const userInfo = useContext(userInfoContext);
 
 	const handleEmailChange = (e: React.ChangeEvent<HTMLInputElement>) => {
 		const newValue = e.target.value;
@@ -19,14 +33,42 @@ export const LoginScreen = () => {
 			return;
 		}
 
-		const result = emailSchema.safeParse(newValue);
+		const emailParse = emailSchema.safeParse(newValue);
 
-		if (result.success) {
+		if (emailParse.success) {
 			setIsEmailError(false);
 		} else {
 			setIsEmailError(true);
 		}
 	};
+
+	const handleSubmit = () => {
+		const emailParse = emailSchema.safeParse(email);
+
+		if (emailParse.success && password.length > 0) {
+			const auth = getAuth(app);
+			signInWithEmailAndPassword(auth, email, password)
+				.then((userCredential) => {
+					const info: UserInfo = {
+						isLoggedIn: true,
+						userName: "", //あとで取得するよう変更する
+						userID: userCredential.user.uid,
+						email: email,
+					};
+
+					userInfo.setUserInfo(info);
+					alert("ログインしました");
+					onLoginSuccess(screenName);
+				})
+				.catch((error) => {
+					const errorCode = error.code;
+					const errorMessage = error.message;
+					alert("ログインに失敗しました");
+					console.log(`${errorCode}: ${errorMessage}`);
+				});
+		}
+	};
+
 	return (
 		<Stack direction="column" spacing={{ xs: 1, sm: 2 }}>
 			<Typography variant="h5">Login Screen</Typography>
@@ -47,6 +89,7 @@ export const LoginScreen = () => {
 				onChange={(e) => setPassword(e.target.value)}
 				sx={{ width: "100%", maxWidth: 400 }}
 			/>
+			<Button onClick={handleSubmit}>送信</Button>
 		</Stack>
 	);
 };
