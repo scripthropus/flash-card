@@ -1,4 +1,6 @@
+import { Avatar } from "@mui/material";
 import Box from "@mui/material/Box";
+import { deepOrange, green } from "@mui/material/colors";
 import { createContext, useState } from "react";
 import { AddFlashCardScreen } from "./AddFlashCardScreen";
 import { FlashCardMenu } from "./FlashCardMenu";
@@ -40,6 +42,11 @@ function App() {
 		setCurrentScreen(screenName);
 	};
 
+	//test
+	const test = () => {
+		console.log(userInfo);
+	};
+
 	const renderScreen = () => {
 		switch (currentScreen) {
 			case SCREEN.ADD_FLASH_CARD:
@@ -75,6 +82,11 @@ function App() {
 
 	return (
 		<userInfoContext.Provider value={{ userInfo, setUserInfo }}>
+			<Avatar
+				onClick={test}
+				sx={{ bgcolor: userInfo.isLoggedIn ? green[500] : deepOrange[500] }}
+				variant="rounded"
+			/>
 			<Box sx={{ display: "flex" }}>
 				<FlashCardMenu onNavigate={handleScreenChange} />
 				<Box component="main" sx={{ flexGrow: 1, p: 3, mt: 8 }}>

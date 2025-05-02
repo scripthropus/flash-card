@@ -57,13 +57,11 @@ export const LoginScreen = ({
 					};
 
 					userInfo.setUserInfo(info);
-					alert("ログインしました");
 					onLoginSuccess(screenName);
 				})
 				.catch((error) => {
 					const errorCode = error.code;
 					const errorMessage = error.message;
-					alert("ログインに失敗しました");
 					console.log(`${errorCode}: ${errorMessage}`);
 				});
 		}

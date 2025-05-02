@@ -6,8 +6,9 @@ import List from "@mui/material/List";
 import ListItem from "@mui/material/ListItem";
 import ListItemButton from "@mui/material/ListItemButton";
 import ListItemText from "@mui/material/ListItemText";
-import { useState } from "react";
-import { SCREEN } from "./App";
+import { useContext, useState } from "react";
+import { SCREEN, userInfoContext } from "./App";
+import { guest } from "./userInfo";
 
 interface FlashCardMenuProps {
 	onNavigate: (screenName: string) => void;
@@ -15,6 +16,7 @@ interface FlashCardMenuProps {
 
 export const FlashCardMenu = ({ onNavigate }: FlashCardMenuProps) => {
 	const [open, setOpen] = useState(false);
+	const userInfo = useContext(userInfoContext);
 
 	const toggleDrawer = (newOpen: boolean) => () => {
 		setOpen(newOpen);
@@ -22,6 +24,12 @@ export const FlashCardMenu = ({ onNavigate }: FlashCardMenuProps) => {
 
 	const handleListItemClick = (screenName: string) => {
 		onNavigate(screenName);
+		setOpen(false);
+	};
+
+	const handleLoggedOut = () => {
+		userInfo.setUserInfo(guest);
+		console.log(userInfo.userInfo);
 		setOpen(false);
 	};
 
@@ -46,6 +54,8 @@ export const FlashCardMenu = ({ onNavigate }: FlashCardMenuProps) => {
 					</ListItem>
 				))}
 			</List>
+			<Divider />
+			<Button onClick={handleLoggedOut}>Log out</Button>
 		</Box>
 	);
 
