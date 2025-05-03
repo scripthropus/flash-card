@@ -1,5 +1,7 @@
 import { Box, Button, Stack, TextField, Typography } from "@mui/material";
-import { useState } from "react";
+import { useContext, useState } from "react";
+import { userInfoContext } from "./App";
+import { type FlashCard, addFlashCard } from "./flashCardService";
 
 export const AddFlashCardScreen = () => {
 	const [deckName, setDeckName] = useState("");
@@ -7,15 +9,24 @@ export const AddFlashCardScreen = () => {
 	const [answer, setAnswer] = useState("");
 	const [incorrectAnswers, setIncorrectAnswers] = useState(["", "", ""]);
 
+	const userInfo = useContext(userInfoContext);
+
 	const handleIncorrectAnswerChange = (index: number, value: string) => {
 		const newIncorrectAnswers = [...incorrectAnswers];
 		newIncorrectAnswers[index] = value;
 		setIncorrectAnswers(newIncorrectAnswers);
 	};
 
-	const handleAddFlashCard = () => {
+	const handleAddFlashCard = async () => {
 		if (deckName && question && answer && incorrectAnswers.every(Boolean)) {
 			console.log("追加");
+			const flashCard: FlashCard = {
+				deckName: deckName,
+				question: question,
+				answer: answer,
+				incorrectAns: incorrectAnswers,
+			};
+			await addFlashCard(userInfo.userInfo.userID, flashCard);
 		} else {
 			alert("すべての項目を入力してください");
 		}
