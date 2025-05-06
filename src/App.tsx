@@ -1,6 +1,6 @@
-import { AppBar, Avatar } from "@mui/material";
+import { AppBar, Avatar, Toolbar, Typography } from "@mui/material";
 import Box from "@mui/material/Box";
-import { deepOrange, green } from "@mui/material/colors";
+import { green, grey } from "@mui/material/colors";
 import { createContext, useState } from "react";
 import { AddFlashCardScreen } from "./AddFlashCardScreen";
 import { FlashCardMenu } from "./FlashCardMenu";
@@ -42,11 +42,6 @@ function App() {
 		setCurrentScreen(screenName);
 	};
 
-	//test
-	const test = () => {
-		console.log(userInfo);
-	};
-
 	const renderScreen = () => {
 		switch (currentScreen) {
 			case SCREEN.ADD_FLASH_CARD:
@@ -82,14 +77,20 @@ function App() {
 
 	return (
 		<userInfoContext.Provider value={{ userInfo, setUserInfo }}>
-			<AppBar position="static">
-				<Avatar
-					onClick={test}
-					sx={{ bgcolor: userInfo.isLoggedIn ? green[500] : deepOrange[500] }}
-					variant="rounded"
-				/>
-				<FlashCardMenu onNavigate={handleScreenChange} />
-			</AppBar>
+			<Box sx={{ flexGrow: 1 }}>
+				<AppBar position="static" color="transparent">
+					<Toolbar>
+						<FlashCardMenu onNavigate={handleScreenChange} />
+						<Typography variant="h6" component="div" sx={{ flexGrow: 1 }}>
+							Flash Card
+						</Typography>
+						<Avatar
+							sx={{ bgcolor: userInfo.isLoggedIn ? green[300] : grey[500] }}
+							variant="rounded"
+						/>
+					</Toolbar>
+				</AppBar>
+			</Box>
 			<Box sx={{ display: "flex" }}>
 				<Box component="main" sx={{ flexGrow: 1, p: 3, mt: 8 }}>
 					{renderScreen()}

@@ -1,3 +1,5 @@
+import MenuIcon from "@mui/icons-material/Menu";
+import { IconButton } from "@mui/material";
 import Box from "@mui/material/Box";
 import Button from "@mui/material/Button";
 import Divider from "@mui/material/Divider";
@@ -60,13 +62,20 @@ export const FlashCardMenu = ({ onNavigate }: FlashCardMenuProps) => {
 	);
 
 	return (
-		<div>
-			<Button onClick={toggleDrawer(true)} variant="contained">
-				メニュー
-			</Button>
+		<>
+			<IconButton
+				size="large"
+				edge="start"
+				color="inherit"
+				aria-label="menu"
+				sx={{ mr: 2 }}
+				onClick={toggleDrawer(true)}
+			>
+				<MenuIcon />
+			</IconButton>
 			<Drawer open={open} onClose={toggleDrawer(false)}>
 				{DrawerList}
 			</Drawer>
-		</div>
+		</>
 	);
 };
