@@ -1,14 +1,12 @@
 import {
-	QuerySnapshot,
 	addDoc,
+	arrayUnion,
 	collection,
-	getDocs,
-	query,
-	where,
+	doc,
+	getDoc,
+	getFirestore,
+	setDoc,
 } from "firebase/firestore";
-import { getFirestore } from "firebase/firestore";
-import { useContext } from "react";
-import { userInfoContext } from "./App";
 import { app } from "./firebase";
 
 const db = getFirestore(app);
@@ -20,41 +18,79 @@ export interface FlashCard {
 	incorrectAns: string[];
 }
 
-export const addFlashCard = async (userID: string, flashCards: FlashCard) => {
+export const addFlashCard = async (
+	userID: string,
+	flashCardData: FlashCard,
+) => {
 	if (!userID) {
+		console.error("ユーザーIDが指定されていません。");
 		return;
 	}
-	try {
-		const flashCardsCollectionRef = await collection(
-			db,
-			"users",
-			userID,
-			"flashCards",
+	if (!flashCardData.deckName) {
+		console.error(
+			"デッキ名 (deckName) がフラッシュカードデータに含まれていません。",
 		);
-		await addDoc(flashCardsCollectionRef, flashCards);
+		return;
+	}
+
+	const userDocRef = doc(db, "users", userID);
+
+	const flashCardsCollectionRef = collection(
+		db,
+		"users",
+		userID,
+		flashCardData.deckName,
+	);
+
+	try {
+		await setDoc(
+			userDocRef,
+			{
+				existingFlashCards: arrayUnion(flashCardData.deckName),
+			},
+			{ merge: true },
+		);
+
+		console.log(
+			`ユーザー (${userID}) の existingFlashCards に '${flashCardData.deckName}' を追加/確認しました。`,
+		);
+
+		const addedDoc = await addDoc(flashCardsCollectionRef, flashCardData);
+		console.log(
+			`'${flashCardData.deckName}' デッキに新しいフラッシュカード (ID: ${addedDoc.id}) を追加しました。`,
+		);
 	} catch (error) {
-		console.error("追加に失敗しました");
-		console.error(error);
+		console.error(
+			"フラッシュカードの追加またはユーザー情報の更新に失敗しました:",
+			error,
+		);
 	}
 };
 
-export const fetchFlashCards = async (userID: string) => {
+export const fetchDeckName = async (userID: string) => {
 	if (!userID) {
-		return;
+		console.warn("fetchDeckName が userID なしで呼び出されました。");
+		return [];
 	}
 
-	const flashCardsCollectionRef = collection(db, "users", userID, "flashCards");
+	const userDocRef = doc(db, "users", userID);
 
 	try {
-		const querySnapshot = await getDocs(flashCardsCollectionRef);
+		const docSnap = await getDoc(userDocRef);
+		if (!docSnap.exists()) {
+			console.log("ドキュメントが見つかりません");
+			return [];
+		}
 
-		const flashCards = querySnapshot.docs.map((doc) => ({
-			...doc.data(),
-		})) as FlashCard[];
+		const userData = docSnap.data();
 
-		return flashCards;
+		const deckNames = Array.isArray(userData.existingFlashCards)
+			? userData.existingFlashCards
+			: [];
+
+		return deckNames;
 	} catch (error) {
-		console.error(error);
+		console.error(`デッキ名取得中にエラーが発生しました: ${error}`);
 		throw error;
 	}
 };

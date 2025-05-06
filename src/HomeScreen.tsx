@@ -3,7 +3,7 @@ import { User } from "firebase/auth";
 import { useContext, useEffect, useState } from "react";
 import useSWR from "swr";
 import { userInfoContext } from "./App";
-import { fetchFlashCards } from "./flashCardService";
+import { fetchDeckName } from "./flashCardService";
 import { type UserInfo, guest } from "./userInfo";
 
 interface UserFlashCardsProps {
@@ -12,10 +12,10 @@ interface UserFlashCardsProps {
 const UserFlashCards = ({ userId }: UserFlashCardsProps) => {
 	const userInfo = useContext(userInfoContext);
 	const {
-		data: flashCards,
+		data: decksName,
 		error,
 		isLoading,
-	} = useSWR(userId ? userId : null, fetchFlashCards);
+	} = useSWR(userId ? userId : null, fetchDeckName);
 
 	if (error && userInfo.userInfo.isLoggedIn) {
 		console.error("SWR fetch error:", error);
@@ -27,10 +27,7 @@ const UserFlashCards = ({ userId }: UserFlashCardsProps) => {
 	}
 
 	//ログインしているがカードがない
-	if (
-		!flashCards ||
-		(flashCards.length === 0 && userInfo.userInfo.isLoggedIn)
-	) {
+	if (!decksName || (decksName.length === 0 && userInfo.userInfo.isLoggedIn)) {
 		return <div>利用可能なフラッシュカードはありません。</div>;
 	}
 
@@ -42,8 +39,8 @@ const UserFlashCards = ({ userId }: UserFlashCardsProps) => {
 	return (
 		<div>
 			<ul>
-				{flashCards.map((card) => (
-					<li key={card.deckName}>{card.deckName}</li>
+				{decksName.map((deck) => (
+					<li key={deck}>{deck}</li>
 				))}
 			</ul>
 		</div>

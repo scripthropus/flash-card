@@ -19,7 +19,6 @@ export const AddFlashCardScreen = () => {
 
 	const handleAddFlashCard = async () => {
 		if (deckName && question && answer && incorrectAnswers.every(Boolean)) {
-			console.log("追加");
 			const flashCard: FlashCard = {
 				deckName: deckName,
 				question: question,
