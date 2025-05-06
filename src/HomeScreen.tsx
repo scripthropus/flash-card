@@ -1,4 +1,5 @@
-import { Typography } from "@mui/material";
+import Box from "@mui/material/Box";
+import Grid from "@mui/material/Grid";
 import { useContext } from "react";
 import useSWR from "swr";
 import { userInfoContext } from "./App";
@@ -35,22 +36,25 @@ const UserDecksName = ({ userId }: UserDecksNameProps) => {
 	}
 
 	return (
-		<div>
-			<ul>
-				{decksName.map((deck) => (
-					<li key={deck}>{deck}</li>
-				))}
-			</ul>
-		</div>
+		<Grid
+			container
+			spacing={{ xs: 2, md: 3 }}
+			columns={{ xs: 4, sm: 8, md: 12 }}
+		>
+			{decksName.map((deck) => (
+				<Grid key={deck} size={{ xs: 2, sm: 4, md: 4 }} className="text-center">
+					{deck}
+				</Grid>
+			))}
+		</Grid>
 	);
 };
 
 export const HomeScreen = () => {
 	const userInfo = useContext(userInfoContext);
 	return (
-		<Typography variant="h5" className="font-bold text-5xl">
-			後でここにフラッシュカードのリストを表示する予定 (Home Screen)
+		<Box>
 			<UserDecksName userId={userInfo.userInfo.userID} />
-		</Typography>
+		</Box>
 	);
 };

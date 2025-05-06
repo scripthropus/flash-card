@@ -51,14 +51,7 @@ export const addFlashCard = async (
 			{ merge: true },
 		);
 
-		console.log(
-			`ユーザー (${userID}) の existingFlashCards に '${flashCardData.deckName}' を追加/確認しました。`,
-		);
-
-		const addedDoc = await addDoc(flashCardsCollectionRef, flashCardData);
-		console.log(
-			`'${flashCardData.deckName}' デッキに新しいフラッシュカード (ID: ${addedDoc.id}) を追加しました。`,
-		);
+		await addDoc(flashCardsCollectionRef, flashCardData);
 	} catch (error) {
 		console.error(
 			"フラッシュカードの追加またはユーザー情報の更新に失敗しました:",
