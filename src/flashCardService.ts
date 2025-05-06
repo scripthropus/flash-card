@@ -1,4 +1,11 @@
-import { addDoc, collection, doc, setDoc } from "firebase/firestore";
+import {
+	QuerySnapshot,
+	addDoc,
+	collection,
+	getDocs,
+	query,
+	where,
+} from "firebase/firestore";
 import { getFirestore } from "firebase/firestore";
 import { useContext } from "react";
 import { userInfoContext } from "./App";
@@ -22,10 +29,32 @@ export const addFlashCard = async (userID: string, flashCards: FlashCard) => {
 			db,
 			"users",
 			userID,
-			flashCards.deckName,
+			"flashCards",
 		);
 		await addDoc(flashCardsCollectionRef, flashCards);
 	} catch (error) {
 		console.error("追加に失敗しました");
+		console.error(error);
+	}
+};
+
+export const fetchFlashCards = async (userID: string) => {
+	if (!userID) {
+		return;
+	}
+
+	const flashCardsCollectionRef = collection(db, "users", userID, "flashCards");
+
+	try {
+		const querySnapshot = await getDocs(flashCardsCollectionRef);
+
+		const flashCards = querySnapshot.docs.map((doc) => ({
+			...doc.data(),
+		})) as FlashCard[];
+
+		return flashCards;
+	} catch (error) {
+		console.error(error);
+		throw error;
 	}
 };
