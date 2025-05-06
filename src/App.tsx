@@ -1,4 +1,4 @@
-import { Avatar } from "@mui/material";
+import { AppBar, Avatar } from "@mui/material";
 import Box from "@mui/material/Box";
 import { deepOrange, green } from "@mui/material/colors";
 import { createContext, useState } from "react";
@@ -82,13 +82,15 @@ function App() {
 
 	return (
 		<userInfoContext.Provider value={{ userInfo, setUserInfo }}>
-			<Avatar
-				onClick={test}
-				sx={{ bgcolor: userInfo.isLoggedIn ? green[500] : deepOrange[500] }}
-				variant="rounded"
-			/>
-			<Box sx={{ display: "flex" }}>
+			<AppBar position="static">
+				<Avatar
+					onClick={test}
+					sx={{ bgcolor: userInfo.isLoggedIn ? green[500] : deepOrange[500] }}
+					variant="rounded"
+				/>
 				<FlashCardMenu onNavigate={handleScreenChange} />
+			</AppBar>
+			<Box sx={{ display: "flex" }}>
 				<Box component="main" sx={{ flexGrow: 1, p: 3, mt: 8 }}>
 					{renderScreen()}
 				</Box>

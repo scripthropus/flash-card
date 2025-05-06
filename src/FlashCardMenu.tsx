@@ -61,7 +61,9 @@ export const FlashCardMenu = ({ onNavigate }: FlashCardMenuProps) => {
 
 	return (
 		<div>
-			<Button onClick={toggleDrawer(true)}>メニュー</Button>
+			<Button onClick={toggleDrawer(true)} variant="contained">
+				メニュー
+			</Button>
 			<Drawer open={open} onClose={toggleDrawer(false)}>
 				{DrawerList}
 			</Drawer>

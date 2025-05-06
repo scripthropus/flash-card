@@ -1,13 +1,13 @@
 export type UserInfo = {
 	isLoggedIn: boolean;
-	userName: string;
-	userID: string;
-	email: string;
+	userName: string | null;
+	userID: string | null;
+	email: string | null;
 };
 
 export const guest: UserInfo = {
 	isLoggedIn: false,
-	userName: "guest",
-	userID: "00000",
-	email: "guest",
+	userName: null,
+	userID: null,
+	email: null,
 };

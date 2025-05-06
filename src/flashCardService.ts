@@ -19,7 +19,7 @@ export interface FlashCard {
 }
 
 export const addFlashCard = async (
-	userID: string,
+	userID: string | null,
 	flashCardData: FlashCard,
 ) => {
 	if (!userID) {
