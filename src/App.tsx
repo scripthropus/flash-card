@@ -4,7 +4,7 @@ import { green, grey } from "@mui/material/colors";
 import { createContext, useState } from "react";
 import { AddFlashCardScreen } from "./AddFlashCardScreen";
 import { FlashCardMenu } from "./FlashCardMenu";
-import { FlashCardQuiz } from "./FlashCardQuiz";
+import { FlashCardQuizScreen } from "./FlashCardQuizScreen";
 import { HomeScreen } from "./HomeScreen";
 import { LoginScreen } from "./LoginScreen";
 import { SignUpScreen } from "./SignUpScreen";
@@ -28,12 +28,6 @@ export const SCREEN = {
 	FLASH_CARD: "flashCard",
 } as const;
 
-const testData = {
-	question: "question",
-	answer: "ANS",
-	incorrectAns: ["a", "b", "c"],
-};
-
 function App() {
 	const [currentScreen, setCurrentScreen] = useState<string>("home");
 	const [userInfo, setUserInfo] = useState(guest);
@@ -47,13 +41,7 @@ function App() {
 			case SCREEN.ADD_FLASH_CARD:
 				return <AddFlashCardScreen />;
 			case SCREEN.FLASH_CARD:
-				return (
-					<FlashCardQuiz
-						question={testData.question}
-						answer={testData.answer}
-						incorrectAns={testData.incorrectAns}
-					/>
-				);
+				return <FlashCardQuizScreen />;
 			case SCREEN.LOGIN:
 				return (
 					<LoginScreen

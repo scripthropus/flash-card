@@ -4,6 +4,7 @@ import {
 	collection,
 	doc,
 	getDoc,
+	getDocs,
 	getFirestore,
 	setDoc,
 } from "firebase/firestore";
@@ -16,6 +17,10 @@ export interface FlashCard {
 	question: string;
 	answer: string;
 	incorrectAns: string[];
+}
+
+export interface FlashCardAndID extends FlashCard {
+	id: string;
 }
 
 export const addFlashCard = async (
@@ -60,7 +65,7 @@ export const addFlashCard = async (
 	}
 };
 
-export const fetchDeckName = async (userID: string) => {
+export const fetchDeckName = async (userID: string): Promise<string[]> => {
 	if (!userID) {
 		console.warn("fetchDeckName が userID なしで呼び出されました。");
 		return [];
@@ -86,4 +91,63 @@ export const fetchDeckName = async (userID: string) => {
 		console.error(`デッキ名取得中にエラーが発生しました: ${error}`);
 		throw error;
 	}
+};
+
+export interface DeckWithFlashcards {
+	deckName: string;
+	cards: FlashCardAndID[];
+}
+
+export const fetchAllDecksWithFlashcards = async (
+	userID: string,
+): Promise<DeckWithFlashcards[]> => {
+	if (!userID) {
+		console.warn("fetchAllDecksWithFlashcards: userID is required.");
+		return [];
+	}
+
+	let deckNames: string[];
+	try {
+		deckNames = await fetchDeckName(userID);
+	} catch (error) {
+		console.error(
+			"fetchAllDecksWithFlashcards: fetchDeckNameでのエラー",
+			error,
+		);
+		throw error;
+	}
+
+	if (deckNames.length === 0) {
+		return [];
+	}
+
+	const allDecksData: DeckWithFlashcards[] = [];
+
+	for (const deckName of deckNames) {
+		if (typeof deckName !== "string" || deckName.trim() === "") {
+			console.warn(
+				`fetchAllDeckWithFlashcards: 不正な値のdeckName"${deckName}"は処理を飛ばします`,
+			);
+			continue;
+		}
+
+		try {
+			const flashCardsCollectionRef = collection(db, "users", userID, deckName);
+			const querySnapshot = await getDocs(flashCardsCollectionRef);
+			const flashcards: FlashCardAndID[] = [];
+
+			for (const docSnap of querySnapshot.docs) {
+				flashcards.push(docSnap.data() as FlashCardAndID);
+			}
+			allDecksData.push({ deckName, cards: flashcards });
+		} catch (error) {
+			console.error(
+				`fetchAllDeckWithFlashcards: カードを取得する段階でのエラー"${deckName}"`,
+				error,
+			);
+			throw error;
+		}
+	}
+
+	return allDecksData;
 };

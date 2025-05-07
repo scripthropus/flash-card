@@ -1,4 +1,5 @@
 import { Button, Stack, Typography } from "@mui/material";
+import { useMemo } from "react";
 
 interface FlashCardProps {
 	question: string;
@@ -20,16 +21,22 @@ export const FlashCardQuiz = ({
 	answer,
 	incorrectAns,
 }: FlashCardProps) => {
-	const shuffled = shuffleArray(incorrectAns);
-	const rand = Math.floor(Math.random() * 4);
-	const choices = shuffled.toSpliced(rand, 0, answer);
+	const choicesWithId = useMemo(() => {
+		const shuffledAnswers = shuffleArray(incorrectAns);
+		const rand = Math.floor(Math.random() * 4);
+		const finalChoices = shuffledAnswers.toSpliced(rand, 0, answer);
+		return finalChoices.map((choiceValue) => ({
+			id: crypto.randomUUID(),
+			value: choiceValue,
+		}));
+	}, [answer, incorrectAns]);
 	return (
 		<>
 			<Typography variant="h5">{question}</Typography>
 			<Stack direction="column" spacing={{ sm: 2 }}>
-				{choices.map((val) => (
-					<Button key={val} sx={{ width: "100%", maxWidth: 400 }}>
-						{val}
+				{choicesWithId.map((choice) => (
+					<Button key={choice.id} sx={{ width: "100%", maxWidth: 400 }}>
+						{choice.value}
 					</Button>
 				))}
 			</Stack>
