@@ -121,14 +121,9 @@ export const fetchAllDecksWithFlashcards = async (
 		return [];
 	}
 
-	const allDecksData: DeckWithFlashcards[] = [];
-
-	for (const deckName of deckNames) {
+	const fetchPromises = deckNames.map(async (deckName) => {
 		if (typeof deckName !== "string" || deckName.trim() === "") {
-			console.warn(
-				`fetchAllDeckWithFlashcards: 不正な値のdeckName"${deckName}"は処理を飛ばします`,
-			);
-			continue;
+			return null;
 		}
 
 		try {
@@ -137,17 +132,23 @@ export const fetchAllDecksWithFlashcards = async (
 			const flashcards: FlashCardAndID[] = [];
 
 			for (const docSnap of querySnapshot.docs) {
-				flashcards.push(docSnap.data() as FlashCardAndID);
+				flashcards.push({
+					id: docSnap.id,
+					...docSnap.data(),
+				} as FlashCardAndID);
 			}
-			allDecksData.push({ deckName, cards: flashcards });
+			return { deckName, cards: flashcards };
 		} catch (error) {
-			console.error(
-				`fetchAllDeckWithFlashcards: カードを取得する段階でのエラー"${deckName}"`,
-				error,
-			);
-			throw error;
+			console.error(error);
+			return null;
 		}
-	}
+	});
 
-	return allDecksData;
+	try {
+		const results = await Promise.all(fetchPromises);
+		return results.filter((deck) => deck !== null) as DeckWithFlashcards[];
+	} catch (error) {
+		console.error(error);
+		throw error;
+	}
 };
